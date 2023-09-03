@@ -1,5 +1,5 @@
 # shuntingYardRegexToPostfix
-A
+A project that implements the Shunting Yard algorithm to convert regular expressions from infix notation to postfix notation. It provides a user-friendly way to transform regular expressions commonly used in computer science and programming.
 
 <p align="center">
   <br>
