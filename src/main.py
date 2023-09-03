@@ -16,4 +16,4 @@ shunting_yard = regexToPostfix(alphabet, expression)
 
 # print results
 print(str(regexToPostfix))
-print("postfix expression:", shunting_yard.get_result())
+print("postfix expression:", shunting_yard.getResult())

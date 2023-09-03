@@ -9,9 +9,9 @@ class regexToPostfix:
     def __init__(self, alphabet, expression):
         self.alphabet = alphabet
         self.expression = expression
-        self.transformedExpression = self._transform_expression()
-        self.tokens = self._tokenize(self.transformedExpression)
-        self.result = self._shunting_yard()
+        self.transformedExpression = self.transformExpression()
+        self.tokens = self.tokenize(self.transformedExpression)
+        self.result = self.shuntingYard()
 
     def __str__(self):
         data = [
@@ -22,7 +22,7 @@ class regexToPostfix:
         ]
         return "\n".join(data)
 
-    def _transform_expression(self):
+    def transformExpression(self):
         transformed = ""
         for i, char in enumerate(self.expression):
             if i < len(self.expression) - 1:
@@ -35,10 +35,10 @@ class regexToPostfix:
                 transformed += char
         return transformed
 
-    def _tokenize(expression):
+    def tokenize(self, expression):
         return list(expression)
 
-    def _get_precedence(operator):
+    def getPrecedence(self, operator):
         precedence = {
             "*": 3,
             "^": 2,
@@ -46,7 +46,7 @@ class regexToPostfix:
         }
         return precedence.get(operator, 0)
 
-    def _shunting_yard(self):
+    def shuntingYard(self):
         output = []
         stack = []
         for token in self.tokens:
@@ -59,7 +59,7 @@ class regexToPostfix:
                     output.append(stack.pop())
                 stack.pop()
             else:
-                while stack and self._get_precedence(stack[-1]) >= self._get_precedence(token):
+                while stack and self.getPrecedence(stack[-1]) >= self.getPrecedence(token):
                     output.append(stack.pop())
                 stack.append(token)
 
@@ -68,5 +68,5 @@ class regexToPostfix:
 
         return output
 
-    def get_result(self):
+    def getResult(self):
         return self.result
