@@ -18,7 +18,12 @@ A project that implements the Shunting Yard algorithm to convert regular express
 ## Features
 
 The main features of the application include:
-- 
+- This is a Python script designed to convert a regular expression into a postfix expression using the Shunting Yard algorithm.
+- It imports the regexToPostfix class from a separate module named regexToPostfix.py.
+- It defines an alphabet and a regular expression to be processed.
+- It creates an instance of the regexToPostfix class with the specified inputs.
+- It applies the Shunting Yard algorithm to convert the regular expression into postfix notation.
+- It prints the resulting postfix expression and additional information about the conversion.
 
 ## How To Use
 To clone and run this application, you'll need [Git](https://git-scm.com) and [Python](https://www.python.org/downloads/) installed on your computer. From your command line:
