@@ -8,13 +8,12 @@
 from regexToPostfix import regexToPostfix
 
 # alphabet and regex expression
-alphabet = "abc*|"
-expression = "(a|b)*c"
+alphabet = "abce*+"
+expression = "a*(a+b)*e*"
 
 # shunting yard algorithm instance in 'regexToPostfix' file
-shunting_yard = regexToPostfix(alphabet, expression)
+shunting_yard = regexToPostfix(alphabet, expression, "e")
 
 # print results
-print(str(regexToPostfix))
-print(f"Initial expression: "+expression)
-print("Postfix expression:", shunting_yard.getResult())
+print(shunting_yard)
+print("postfix expression:", shunting_yard.getResult())
