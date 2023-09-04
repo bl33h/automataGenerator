@@ -12,9 +12,9 @@ alphabet = "abc*|"
 expression = "(a|b)*c"
 
 # shunting yard algorithm instance in 'regexToPostfix' file
-shunting_yard = regexToPostfix(alphabet, expression)
+shuntingYardExpression = regexToPostfix(alphabet, expression)
 
 # print results
 print(str(regexToPostfix))
-print(f"Initial expression: "+expression)
-print("Postfix expression:", shunting_yard.getResult())
+print(f"initial expression: " + expression)
+print("postfix expression:", shuntingYardExpression.getResult())
