@@ -6,12 +6,13 @@
 #Last modification: 03/09/2023
 
 class regexToPostfix:
-    def __init__(self, alphabet, expression):
-        self.alphabet = alphabet  # Conjunto de caracteres permitidos en la expresión regular.
-        self.expression = expression  # La expresión regular en notación infix.
-        self.transformedExpression = self.transformExpression()  # La expresión infix transformada.
-        self.tokens = self.tokenize(self.transformedExpression)  # Lista de tokens en la expresión.
-        self.result = self.shuntingYard()  # La expresión postfix resultante.
+    def __init__(self, alphabet, expression, epsilon):
+        self.alphabet = alphabet
+        self.expression = expression
+        self.epsilon = epsilon
+        self.transformedExpression = self.transformExpression()
+        self.tokens = self.tokenize(self.transformedExpression)
+        self.result = self.shuntingYard()
 
     def __str__(self):
         data = [
@@ -27,9 +28,10 @@ class regexToPostfix:
         for i, char in enumerate(self.expression):
             if i < len(self.expression) - 1:
                 transformed += char
-                # Agregar "^" entre literales contiguos o "*" y una letra para evitar ambigüedades.
-                should_concat_literals = char in self.alphabet and self.expression[i + 1] in self.alphabet
-                should_concat_kleen_star = char == "*" and self.expression[i + 1] in self.alphabet
+                nextChar = self.expression[i + 1]
+                # should_concat_literals = char in self.alphabet and nextChar in self.alphabet and nextChar != "+" and nextChar != "*"
+                should_concat_literals = char.isalnum() and nextChar.isalnum()
+                should_concat_kleen_star = char == "*" and nextChar in self.alphabet or nextChar == "("
                 if should_concat_literals or should_concat_kleen_star:
                     transformed += "^"
             else:
@@ -51,8 +53,8 @@ class regexToPostfix:
         output = []
         stack = []
         for token in self.tokens:
-            if token in self.alphabet:
-                output.append(token)  # Si es un carácter del alfabeto, agregarlo a la salida.
+            if token.isalnum():
+                output.append(token if token != self.epsilon else "\u03b5")
             elif token == "(":
                 stack.append(token)  # Si es un paréntesis izquierdo, agregarlo a la pila.
             elif token == ")":
@@ -70,7 +72,7 @@ class regexToPostfix:
         while stack:
             output.append(stack.pop())
 
-        return output  # La expresión postfix resultante.
+        return "".join(output)
 
     def getResult(self):
         return self.result
