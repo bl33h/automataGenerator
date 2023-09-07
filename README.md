@@ -2,7 +2,7 @@
 
 <p align="center">
   <br>
-  <img src="" alt="pic" width="500">
+  <img src="https://miro.medium.com/v2/resize:fit:640/1*BDs8D_Jtb7yKMAK86mKADg.gif" alt="pic" width="500">
   <br>
 </p>
 <p align="center" >
