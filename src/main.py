@@ -14,8 +14,8 @@ alphabet = "abce*+10" # modify this according to your needs
 expression = input("enter the regular expression: ")
 
 # shunting yard algorithm instance in 'regexToPostfix' file
-shunting_yard = regexToPostfix(alphabet, expression, "e")
+shuntingYard = regexToPostfix(alphabet, expression, "e")
 
 # print results
-print(shunting_yard)
-print("postfix expression:", shunting_yard.getResult())
+print(shuntingYard)
+print("postfix expression:", shuntingYard.getResult())
