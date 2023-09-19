@@ -18,6 +18,8 @@ epsilon = "\u03b5"
 # Shunting Yard Algorithm
 shunting_yard = regexToPostfix(alphabet, expression, epsilon)
 postfix_expression = shunting_yard.getResult()
+print(shunting_yard)
+print("postfix expression:", shunting_yard.getResult())
 
 # Create the NFA
 postfix_to_nfa = PostfixToNFA(postfix_expression, alphabet, epsilon)
