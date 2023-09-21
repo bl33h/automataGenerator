@@ -31,7 +31,7 @@ class regexToPostfix:
                 nextChar = self.expression[i + 1]
                 # should_concat_literals = char in self.alphabet and nextChar in self.alphabet and nextChar != "+" and nextChar != "*"
                 should_concat_literals = char.isalnum() and nextChar.isalnum()
-                should_concat_kleen_star = char == "*" and nextChar in self.alphabet or nextChar == "("
+                should_concat_kleen_star = char == "*" and (nextChar in self.alphabet or nextChar == "(") and nextChar != "+"
                 if should_concat_literals or should_concat_kleen_star:
                     transformed += "^"
             else:
