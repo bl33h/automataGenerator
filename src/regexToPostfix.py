@@ -33,7 +33,7 @@ class regexToPostfix:
                 should_concat_literals = char.isalnum() and nextChar.isalnum()
                 should_concat_kleen_star = char == "*" and (nextChar in self.alphabet or nextChar == "(") and nextChar != "+"
                 if should_concat_literals or should_concat_kleen_star:
-                    transformed += "^"
+                    transformed += "."
             else:
                 transformed += char
         return transformed
@@ -44,7 +44,7 @@ class regexToPostfix:
     def getPrecedence(self, operator):
         precedence = {
             "*": 3,
-            "^": 2,
+            ".": 2,
             "+": 1
         }
         return precedence.get(operator, 0)  # Obtiene la precedencia de un operador.
