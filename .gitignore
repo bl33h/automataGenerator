@@ -1,1 +1,63 @@
+# Python virtual environment
+.venv/
+
+# IDE and editor files
+.idea/
+*.pyc
 __pycache__/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.swp
+*.swo
+*.log
+
+# Config and environment files
+.env
+
+# User-specific files
+*.pycharm-settings/
+.vscode/
+
+# Database files
+*.sqlite
+
+# IDE/editor backup and cache files
+*.bak
+*.cache/
+# Python virtual environment
+.venv/
+
+# IDE and editor files
+.idea/
+*.pyc
+__pycache__/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.swp
+*.swo
+*.log
+
+# Dependency and build files
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Config and environment files
+.env
+
+# User-specific files
+*.pycharm-settings/
+.vscode/
+
+# IDE/editor backup and cache files
+*.bak
+*.cache/
