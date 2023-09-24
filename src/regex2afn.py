@@ -1,6 +1,5 @@
 import re
 
-postfix = "ab.*c+"
 
 class Regex2AFNConverter:
     
