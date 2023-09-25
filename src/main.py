@@ -51,33 +51,33 @@ while exit:
         converter = Regex2AFNConverter(epsilon, concat_operator="^")
         afn = converter.convert2NFA(postfix_expression)
         symbols = afn[0]
-        
-        # Corregir la representación de nfa_states si es necesario
-        # (asegúrate de que las transiciones sean diccionarios con conjuntos de estados)
-        for i in range(len(afn[1])):
-            for key, value in afn[1][i].items():
-                if not isinstance(value, set):
-                    afn[1][i][key] = {value}
-        
         nfa_states = afn[1]
         nfa_start = afn[2]
         nfa_end = afn[3]
+
+        # Corregir la representación de nfa_states si es necesario
+        # (asegúrate de que las transiciones sean diccionarios)
+        for state in nfa_states:
+            for key, value in state.items():
+                if not isinstance(value, dict):
+                    state[key] = {value}
 
         print("Inputs:", symbols)
         print("AFN transitions:", nfa_states)
 
         # Convertir el AFN a AFD utilizando AFN2AFDConverter
         afd_converter = AFN2AFDConverter(epsilon)
-        afd_keys, afd_transitions, afd_start, afd_accept = afd_converter.convert2DFA(symbols, nfa_states, nfa_start, nfa_end)
+        afd_keys, afd_transitions, afd_start, afd_accept = afd_converter.convert2DFA(symbols, nfa_states, nfa_start, [nfa_end])
 
-        # Mostrar las transiciones del AFD
-        print("\nAFD Transitions:")
-        for state, transitions in afd_transitions.items():
-            print(f"State {state}:")
-            for symbol, target_state in transitions.items():
-                print(f"  {symbol} -> {target_state}")
+        # Show the AFD transitions
+        def show_afd_transitions(afd_transitions):
+            print("AFD Transitions:")
+            for state, transitions in afd_transitions.items():
+                print(f"State {state}:")
+                for symbol, target_state in transitions.items():
+                    print(f"  {symbol} -> {target_state}")
 
-
+        show_afd_transitions(afd_transitions)
     
     if option == "4":
         print("")
