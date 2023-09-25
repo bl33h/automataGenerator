@@ -3,12 +3,13 @@ import re
 
 class Regex2AFNConverter:
     
-    def __init__(self, epsilon, concat_operator):
+    def __init__(self, epsilon, concat_operator="^", kleene_operator="+"):
         self.epsilon = epsilon
         self.concat_operator = concat_operator
+        self.kleene_operator = kleene_operator
         
     def convert2NFA(self, postfix_expression):
-        regex = ''.join(postfix_expression)
+        regex = postfix_expression
 
         keys = list(set(re.sub('[^A-Za-z0-9]+', '', regex) + self.epsilon))
 
@@ -45,7 +46,7 @@ class Regex2AFNConverter:
                     start = c1
                 if end == r2:
                     end = c2
-            elif i == self.concat_operator: # Concatenation
+            elif i == self.kleene_operator:  # Cerradura de Kleene
                 r11, r12 = stack.pop()
                 r21, r22 = stack.pop()
                 stack.append([r21, r12])
@@ -73,25 +74,3 @@ class Regex2AFNConverter:
                     end = c2
         
         return (keys, states, start, end)
-    
-
-
-# converter = Regex2AFNConverter(epsilon="e", concat_operator="^")
-
-# afn = converter.convert2NFA("ab^")
-# symbols = afn[0]
-# states = afn[1]
-# start = afn[2]
-# end = afn[3]
-
-# print("Inputs:", symbols)
-
-# print("AFN transitions:", states)
-
-# print("\nTransition table:")
-
-# print("States:\t| Transitions:")
-# for i in range(len(states)):
-#     state = "->{}".format(i) if i == start else "*{}".format(i) if i == end else i
-#     print("{: >3}:\t| {}".format(state, states[i]))
-# print("")
