@@ -45,6 +45,7 @@ class AFD:
         return self.is_accepted(current_state)
 
 # Definición de los datos proporcionados
+
 states = [0, 1, 2, 3, 4]
 symbols = ["a", "b"]
 transitions = [
@@ -68,21 +69,22 @@ afd.set_start_state(start)
 afd.accept_states = end
 
 # Imprimir los resultados del AFD
-print("\nResultados AFD\n----------------")
-print("Estados:", afd.states)
-print("Símbolos:", afd.symbols)
-print("Estado inicial:", afd.start_state)
-print("Estados de aceptación:", afd.accept_states)
-print("Transiciones:")
-for from_state, transitions in afd.transitions.items():
-    for symbol, to_state in transitions.items():
-        print(f" ({from_state}, {symbol}, {to_state})")
+def print_afd_results():
+    print("\nResultados AFD\n----------------")
+    print("Estados:", afd.states)
+    print("Símbolos:", afd.symbols)
+    print("Estado inicial:", afd.start_state)
+    print("Estados de aceptación:", afd.accept_states)
+    print("Transiciones:")
+    for from_state, transitions in afd.transitions.items():
+        for symbol, to_state in transitions.items():
+            print(f" ({from_state}, {symbol}, {to_state})")
 
-# Probando el AFD con cadenas de entrada
-print("\nIngreso de cadenas al autómata\n----------------")
-input_strings = ["ab", "aaab", "abb", "baba", "a", "b", ""]
-for input_string in input_strings:
-    if afd.process_input(input_string):
-        print(f"'{input_string}' SÍ es aceptada")
-    else:
-        print(f"'{input_string}' No es aceptada")
+    # Probando el AFD con cadenas de entrada
+    print("\nIngreso de cadenas al autómata\n----------------")
+    input_strings = ["ab", "aaab", "abb", "baba", "a", "b", ""]
+    for input_string in input_strings:
+        if afd.process_input(input_string):
+            print(f"'{input_string}' SÍ es aceptada")
+        else:
+            print(f"'{input_string}' No es aceptada")

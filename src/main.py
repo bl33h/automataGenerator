@@ -6,6 +6,7 @@
 #Last modification: 24/09/2023
 
 from regexToPostfix import regexToPostfix
+from regex2afn import Regex2AFNConverter
 from regex2afn import *
 from afn2afd import *
 
@@ -35,33 +36,34 @@ while exit:
         converter.print_nfa(nfa)
 
     if option == "3":
-        postfix_expression = regexToPostfix(alphabet, expression, epsilon).getResult()
-        converter = Regex2AFNConverter(epsilon, concat_operator="^")
-        afn = converter.convert2NFA(postfix_expression)
-        symbols = afn[0]
+         print_afd_results()
+        #postfix_expression = regexToPostfix(alphabet, expression, epsilon).getResult()
+        #converter = Regex2AFNConverter(epsilon, concat_operator="^")
+        #afn = converter.convert2NFA(postfix_expression)
+        #symbols = afn[0]
         
         # Modifica nfa_states para convertirlo en un diccionario
-        nfa_states = {}
-        for i, state_transitions in enumerate(afn[1]):
-            nfa_states[i] = state_transitions
+        #nfa_states = {}
+        #for i, state_transitions in enumerate(afn[1]):
+            #nfa_states[i] = state_transitions
 
-        nfa_start = afn[2]
-        nfa_end = afn[3]
+        #nfa_start = afn[2]
+        #nfa_end = afn[3]
 
-        print("Inputs:", symbols)
-        print("AFN transitions:", nfa_states)
+        #print("Inputs:", symbols)
+        #print("AFN transitions:", nfa_states)
 
         # Convertir el AFN a AFD utilizando AFN2AFDConverter
-        afd_converter = AFN2AFDConverter(epsilon)
-        afd_result = afd_converter.convert2DFA(symbols, nfa_states, nfa_start, [nfa_end])
+        #afd_converter = AFN2AFDConverter(epsilon)
+        #afd_result = afd_converter.convert2DFA(symbols, nfa_states, nfa_start, [nfa_end])
 
         # Mostrar los componentes del AFD resultante
-        print("\nAFD Components:")
-        print("Estados:", afd_result["Estados"])
-        print("Simbolos:", afd_result["Simbolos"])
-        print("Inicio:", afd_result["Inicio"])
-        print("Aceptacion:", afd_result["Aceptacion"])
-        print("Transiciones:", afd_result["Transiciones"])
+        #print("\nAFD Components:")
+        #print("Estados:", afd_result["Estados"])
+        #print("Simbolos:", afd_result["Simbolos"])
+        #print("Inicio:", afd_result["Inicio"])
+        #print("Aceptacion:", afd_result["Aceptacion"])
+        #print("Transiciones:", afd_result["Transiciones"])
     
     if option == "4":
         print("")
