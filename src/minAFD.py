@@ -106,6 +106,21 @@ class AFDMinimizer:
                 if stateToKeep not in minEnd: minEnd.add(stateToKeep)
         # Return the minimized DFA with the addition of the state array
         return (symbols, minStates, minTransitions, minStart, minEnd)
+    
+    def print_min_dfa(self, minDFA: tuple):
+        symbols, states, transitions, start, end = minDFA
+        
+        print("ESTADOS =", set(states))
+        print("SIMBOLOS =", set(symbols))
+        print("INICIO =", set([start]))
+        print("ACEPTACION =", set([end]) if not isinstance(end, set) else end)
+        newTransitions = []
+        for i in range(len(states)):
+            for symbol in symbols:
+                state = states[i]
+                nexState = transitions[i].get(symbol)
+                newTransitions.append((state, symbol, nexState))
+        print("TRANSICIONES =", set(newTransitions))
 
 # -----------------------------------
 # Usage example
