@@ -6,8 +6,8 @@
 #Last modification: 24/09/2023
 
 from regexToPostfix import regexToPostfix
-from regex2afn import Regex2AFNConverter
-from afn2afd import AFN2AFDConverter
+from regex2afn import *
+from afn2afd import *
 
 # alphabet and regex expression
 alphabet = "abce*+10"  # modify this according to your needs
@@ -30,54 +30,38 @@ while exit:
 
     if option == "2":
         postfix_expression = regexToPostfix(alphabet, expression, epsilon).getResult()
-        converter = Regex2AFNConverter(epsilon, concat_operator="^")
-        afn = converter.convert2NFA(postfix_expression)
-        symbols = afn[0]
-        states = afn[1]
-        start = afn[2]
-        end = afn[3]
-
-        print("Inputs:", symbols)
-        print("AFN transitions:", states)
-        print("\nTransition table:")
-        print("States:\t| Transitions:")
-        for i in range(len(states)):
-            state = "->{}".format(i) if i == start else "*{}".format(i) if i == end else i
-            print("{: >3}:\t| {}".format(state, states[i]))
+        converter = Regex2AFNConverter("ε")
+        nfa = converter.convert2NFA(postfix_expression)
+        converter.print_nfa(nfa)
 
     if option == "3":
-        # Convertir la expresión regular a postfix
         postfix_expression = regexToPostfix(alphabet, expression, epsilon).getResult()
         converter = Regex2AFNConverter(epsilon, concat_operator="^")
         afn = converter.convert2NFA(postfix_expression)
         symbols = afn[0]
-        nfa_states = afn[1]
+        
+        # Modifica nfa_states para convertirlo en un diccionario
+        nfa_states = {}
+        for i, state_transitions in enumerate(afn[1]):
+            nfa_states[i] = state_transitions
+
         nfa_start = afn[2]
         nfa_end = afn[3]
-
-        # Corregir la representación de nfa_states si es necesario
-        # (asegúrate de que las transiciones sean diccionarios)
-        for state in nfa_states:
-            for key, value in state.items():
-                if not isinstance(value, dict):
-                    state[key] = {value}
 
         print("Inputs:", symbols)
         print("AFN transitions:", nfa_states)
 
         # Convertir el AFN a AFD utilizando AFN2AFDConverter
         afd_converter = AFN2AFDConverter(epsilon)
-        afd_keys, afd_transitions, afd_start, afd_accept = afd_converter.convert2DFA(symbols, nfa_states, nfa_start, [nfa_end])
+        afd_result = afd_converter.convert2DFA(symbols, nfa_states, nfa_start, [nfa_end])
 
-        # Show the AFD transitions
-        def show_afd_transitions(afd_transitions):
-            print("AFD Transitions:")
-            for state, transitions in afd_transitions.items():
-                print(f"State {state}:")
-                for symbol, target_state in transitions.items():
-                    print(f"  {symbol} -> {target_state}")
-
-        show_afd_transitions(afd_transitions)
+        # Mostrar los componentes del AFD resultante
+        print("\nAFD Components:")
+        print("Estados:", afd_result["Estados"])
+        print("Simbolos:", afd_result["Simbolos"])
+        print("Inicio:", afd_result["Inicio"])
+        print("Aceptacion:", afd_result["Aceptacion"])
+        print("Transiciones:", afd_result["Transiciones"])
     
     if option == "4":
         print("")

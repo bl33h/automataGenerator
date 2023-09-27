@@ -64,3 +64,28 @@ class Regex2AFNConverter:
                     end = c2
         
         return (keys, states, start, end)
+    
+    def print_nfa(self, nfa):
+        keys, states, start, end = nfa
+        print("Estados:")
+        for i in range(len(states)):
+            print(f"Estado {i}")
+        
+        print("\nSímbolos:")
+        for key in keys:
+            print(key)
+        
+        print("\nEstado Inicial:")
+        print(start)
+        
+        print("\nEstados de Aceptación:")
+        print(end)
+        
+        print("\nTransiciones:")
+        for i, state in enumerate(states):
+            for symbol, next_state in state.items():
+                if isinstance(next_state, tuple):
+                    for ns in next_state:
+                        print(f"Estado {i} -> Estado {ns} con símbolo '{symbol}'")
+                else:
+                    print(f"Estado {i} -> Estado {next_state} con símbolo '{symbol}'")
