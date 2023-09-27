@@ -3,10 +3,9 @@ import re
 
 class Regex2AFNConverter:
     
-    def __init__(self, epsilon, concat_operator="^", kleene_operator="+"):
+    def __init__(self, epsilon, concat_operator="^"):
         self.epsilon = epsilon
         self.concat_operator = concat_operator
-        self.kleene_operator = kleene_operator
         
     def convert2NFA(self, postfix_expression):
         regex = postfix_expression
@@ -46,15 +45,6 @@ class Regex2AFNConverter:
                     start = c1
                 if end == r2:
                     end = c2
-            elif i == self.kleene_operator:  # Cerradura de Kleene
-                r11, r12 = stack.pop()
-                r21, r22 = stack.pop()
-                stack.append([r21, r12])
-                states[r22][self.epsilon] = r11
-                if start == r11:
-                    start = r21
-                if end == r22:
-                    end = r12
             else:                           # Union
                 counter = counter+1
                 c1 = counter
