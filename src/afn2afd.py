@@ -1,65 +1,88 @@
-class AFN2AFDConverter:
+class AFD:
 
-    def __init__(self, epsilon):
-        self.epsilon = epsilon
+    def __init__(self):
+        self.states = set()
+        self.symbols = set() 
+        self.transitions = {}  
+        self.start_state = None
+        self.accept_states = set()
 
-    def epsilon_closure(self, states, transitions):
-        epsilon_closure_states = set(states)
-        stack = list(states)
+    def add_state(self, state):
+        self.states.add(state)
 
-        while stack:
-            state = stack.pop()
-            if state in transitions and self.epsilon in transitions[state]:
-                epsilon_transitions = transitions[state][self.epsilon]
-                for epsilon_state in epsilon_transitions:
-                    if epsilon_state not in epsilon_closure_states:
-                        epsilon_closure_states.add(epsilon_state)
-                        stack.append(epsilon_state)
+    def add_symbol(self, symbol):
+        self.symbols.add(symbol)
 
-        return frozenset(epsilon_closure_states)
+    def add_transition(self, from_state, symbol, to_state):
+        if from_state not in self.states:
+            self.add_state(from_state)
+        if to_state not in self.states:
+            self.add_state(to_state)
+        if symbol not in self.symbols:
+            self.add_symbol(symbol)
+        if from_state not in self.transitions:
+            self.transitions[from_state] = {}
+        self.transitions[from_state][symbol] = to_state
 
-    def convert2DFA(self, keys, nfa_states, nfa_start, nfa_end):
-        dfa_states = set()
-        dfa_transitions = {}
-        dfa_start = self.epsilon_closure({nfa_start}, nfa_states)
-        dfa_states.add(dfa_start)
-        stack = [dfa_start]
+    def set_start_state(self, state):
+        self.start_state = state
 
-        while stack:
-            current_state = stack.pop()
-            for key in keys:
-                if key != self.epsilon:
-                    next_states = set()
-                    for nfa_state in current_state:
-                        if key in set(nfa_states[nfa_state]):
-                            next_states.update(nfa_states[nfa_state][key])
-                    if next_states:
-                        epsilon_closure_state = self.epsilon_closure(next_states, nfa_states)
-                        if epsilon_closure_state not in dfa_states:
-                            dfa_states.add(epsilon_closure_state)
-                            stack.append(epsilon_closure_state)
-                        if current_state not in dfa_transitions:
-                            dfa_transitions[current_state] = {}
-                        dfa_transitions[current_state][key] = epsilon_closure_state
+    def add_accept_state(self, state):
+        self.accept_states.add(state)
 
-                # Handle epsilon transitions and kleene star (*) operator
-                next_states = set()
-                for nfa_state in current_state:
-                    if self.epsilon in nfa_states[nfa_state] or key == "*":
-                        next_states.update(nfa_states[nfa_state][self.epsilon])
-                if next_states:
-                    epsilon_closure_state = self.epsilon_closure(next_states, nfa_states)
-                    if epsilon_closure_state not in dfa_states:
-                        dfa_states.add(epsilon_closure_state)
-                        stack.append(epsilon_closure_state)
-                    if current_state not in dfa_transitions:
-                        dfa_transitions[current_state] = {}
-                    dfa_transitions[current_state][self.epsilon] = epsilon_closure_state
+    def is_accepted(self, state):
+        return state in self.accept_states
 
-            dfa_accept = set()
-            for state in dfa_states:
-                for nfa_accept_state in nfa_end:
-                    if nfa_accept_state in state:
-                        dfa_accept.add(state)
+    def process_input(self, input_string):
+        current_state = self.start_state
+        for symbol in input_string:
+            if symbol not in self.symbols:
+                return False  
+            if current_state in self.transitions and symbol in self.transitions[current_state]:
+                current_state = self.transitions[current_state][symbol]
+            else:
+                return False 
+        return self.is_accepted(current_state)
 
-            return (keys, dfa_transitions, dfa_start, dfa_accept)
+# Definición de los datos proporcionados
+states = [0, 1, 2, 3, 4]
+symbols = ["a", "b"]
+transitions = [
+    {"a": 1, "b": 2},
+    {"a": 1, "b": 3},
+    {"a": 1, "b": 2},
+    {"a": 1, "b": 4},
+    {"a": 1, "b": 2},
+]
+start = 0
+end = {4}
+
+# Crear y configurar el AFD
+afd = AFD()
+afd.states = set(states)
+afd.symbols = set(symbols)
+for i, transition in enumerate(transitions):
+    for symbol, to_state in transition.items():
+        afd.add_transition(i, symbol, to_state)
+afd.set_start_state(start)
+afd.accept_states = end
+
+# Imprimir los resultados del AFD
+print("\nResultados AFD\n----------------")
+print("Estados:", afd.states)
+print("Símbolos:", afd.symbols)
+print("Estado inicial:", afd.start_state)
+print("Estados de aceptación:", afd.accept_states)
+print("Transiciones:")
+for from_state, transitions in afd.transitions.items():
+    for symbol, to_state in transitions.items():
+        print(f" ({from_state}, {symbol}, {to_state})")
+
+# Probando el AFD con cadenas de entrada
+print("\nIngreso de cadenas al autómata\n----------------")
+input_strings = ["ab", "aaab", "abb", "baba", "a", "b", ""]
+for input_string in input_strings:
+    if afd.process_input(input_string):
+        print(f"'{input_string}' SÍ es aceptada")
+    else:
+        print(f"'{input_string}' No es aceptada")
