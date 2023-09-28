@@ -55,12 +55,12 @@ while exit:
             print("Result written to", nfa_output_file)
 
     if option == "3":
-        afd_results = print_afd_results()
+        afd_results = afd_instance.print_afd_info()
         
         # Guarda los resultados en el archivo
         with open(afd_output_file, "w", encoding="utf-8") as file:
             sys.stdout = file
-            print_afd_results()
+            print(afd_instance)
             sys.stdout = sys.__stdout__  # Restaura la salida estándar
 
     if option == "4":

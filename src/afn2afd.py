@@ -1,34 +1,94 @@
-class AFD:
+from regex2afn import *
 
+from collections import deque
+
+class NFAtoAFDConverter:
+    def __init__(self, nfa_states, nfa_symbols, nfa_transitions, nfa_start_state, nfa_accept_states):
+        self.nfa_states = nfa_states
+        self.nfa_symbols = nfa_symbols
+        self.nfa_transitions = nfa_transitions
+        self.nfa_start_state = nfa_start_state
+        self.nfa_accept_states = nfa_accept_states
+        self.afd_states = set()
+        self.afd_symbols = set()
+        self.afd_transitions = {}
+        self.afd_start_state = None
+        self.afd_accept_states = set()
+        self.convert_nfa_to_afd()
+
+    def epsilon_closure(self, states):
+        epsilon_closure_set = set(states)
+        stack = list(states)
+        while stack:
+            state = stack.pop()
+            if state in self.nfa_transitions and '' in self.nfa_transitions[state]:
+                epsilon_transitions = self.nfa_transitions[state]['']
+                for epsilon_state in epsilon_transitions:
+                    if epsilon_state not in epsilon_closure_set:
+                        epsilon_closure_set.add(epsilon_state)
+                        stack.append(epsilon_state)
+        return list(epsilon_closure_set)
+
+    def convert_nfa_to_afd(self):
+        start_state = self.epsilon_closure([self.nfa_start_state])
+        state_queue = deque()
+        state_queue.append(start_state)
+        state_mapping = {tuple(start_state): start_state}
+
+        while state_queue:
+            current_state = state_queue.popleft()
+            self.afd_states.add(tuple(current_state))
+            if any(state in self.nfa_accept_states for state in current_state):
+                self.afd_accept_states.add(tuple(current_state))
+            for symbol in self.nfa_symbols:
+                if symbol == '':
+                    continue
+                new_state = []
+                for nfa_state in current_state:
+                    if nfa_state in self.nfa_transitions and symbol in self.nfa_transitions[nfa_state]:
+                        new_state.extend(self.nfa_transitions[nfa_state][symbol])
+                if new_state:
+                    epsilon_closure_set = self.epsilon_closure(new_state)
+                    if tuple(epsilon_closure_set) not in state_mapping:
+                        state_queue.append(epsilon_closure_set)
+                        state_mapping[tuple(epsilon_closure_set)] = epsilon_closure_set
+                    self.afd_transitions[tuple(current_state)] = self.afd_transitions.get(tuple(current_state), {})
+                    self.afd_transitions[tuple(current_state)][symbol] = tuple(epsilon_closure_set)
+
+        self.afd_start_state = tuple(start_state)
+
+    def get_afd_params(self):
+        return (
+            list(self.afd_states),
+            list(self.afd_symbols),
+            self.afd_transitions,
+            self.afd_start_state,
+            self.afd_accept_states
+        )
+
+class AFD:
     def __init__(self):
         self.states = set()
-        self.symbols = set() 
-        self.transitions = {}  
+        self.symbols = set()
+        self.transitions = {}
         self.start_state = None
         self.accept_states = set()
 
-    def add_state(self, state):
-        self.states.add(state)
+    def add_states(self, states):
+        self.states.update(states)
 
-    def add_symbol(self, symbol):
-        self.symbols.add(symbol)
+    def add_symbols(self, symbols):
+        self.symbols.update(symbols)
 
     def add_transition(self, from_state, symbol, to_state):
-        if from_state not in self.states:
-            self.add_state(from_state)
-        if to_state not in self.states:
-            self.add_state(to_state)
-        if symbol not in self.symbols:
-            self.add_symbol(symbol)
-        if from_state not in self.transitions:
-            self.transitions[from_state] = {}
+        self.transitions[from_state] = self.transitions.get(from_state, {})
         self.transitions[from_state][symbol] = to_state
 
     def set_start_state(self, state):
         self.start_state = state
 
-    def add_accept_state(self, state):
-        self.accept_states.add(state)
+    def add_accept_states(self, states):
+        self.accept_states.update(states)
 
     def is_accepted(self, state):
         return state in self.accept_states
@@ -37,54 +97,48 @@ class AFD:
         current_state = self.start_state
         for symbol in input_string:
             if symbol not in self.symbols:
-                return False  
+                return False
             if current_state in self.transitions and symbol in self.transitions[current_state]:
                 current_state = self.transitions[current_state][symbol]
             else:
-                return False 
+                return False
         return self.is_accepted(current_state)
+    
+    def print_afd_info(self):
+        print("Estados del AFD:")
+        for state in self.states:
+            print(state)
+        
+        print("\nSímbolos del AFD:")
+        for symbol in self.symbols:
+            print(symbol)
+        
+        print("\nTransiciones del AFD:")
+        for from_state, transitions in self.transitions.items():
+            for symbol, to_state in transitions.items():
+                print(f"De {from_state} a {to_state} con símbolo '{symbol}'")
+        
+        print("\nEstado Inicial del AFD:")
+        print(self.start_state)
+        
+        print("\nEstados de Aceptación del AFD:")
+        for accept_state in self.accept_states:
+            print(accept_state)
 
-# Definición de los datos proporcionados
+converter = NFAtoAFDConverter(nfa_states, nfa_symbols, nfa_transitions, nfa_start_state, nfa_accept_states)
+afd_params = converter.get_afd_params()
 
-states = [0, 1, 2, 3, 4]
-symbols = ["a", "b"]
-transitions = [
-    {"a": 1, "b": 2},
-    {"a": 1, "b": 3},
-    {"a": 1, "b": 2},
-    {"a": 1, "b": 4},
-    {"a": 1, "b": 2},
-]
-start = 0
-end = {4}
+# Creación de una instancia de la clase AFD utilizando los parámetros del AFD
+afd_instance = AFD()
+afd_instance.add_states(afd_params[0])
+afd_instance.add_symbols(afd_params[1])
+for from_state, transitions in afd_params[2].items():
+    for symbol, to_state in transitions.items():
+        afd_instance.add_transition(from_state, symbol, to_state)
+afd_instance.set_start_state(afd_params[3])
+afd_instance.add_accept_states(afd_params[4])
 
-# Crear y configurar el AFD
-afd = AFD()
-afd.states = set(states)
-afd.symbols = set(symbols)
-for i, transition in enumerate(transitions):
-    for symbol, to_state in transition.items():
-        afd.add_transition(i, symbol, to_state)
-afd.set_start_state(start)
-afd.accept_states = end
-
-# Imprimir los resultados del AFD
-def print_afd_results():
-    print("\nResultados AFD\n----------------")
-    print("Estados:", afd.states)
-    print("Símbolos:", afd.symbols)
-    print("Estado inicial:", afd.start_state)
-    print("Estados de aceptación:", afd.accept_states)
-    print("Transiciones:")
-    for from_state, transitions in afd.transitions.items():
-        for symbol, to_state in transitions.items():
-            print(f" ({from_state}, {symbol}, {to_state})")
-
-    # Probando el AFD con cadenas de entrada
-    print("\nIngreso de cadenas al autómata\n----------------")
-    input_strings = ["ab", "aaab", "abb", "baba", "a", "b", ""]
-    for input_string in input_strings:
-        if afd.process_input(input_string):
-            print(f"'{input_string}' SÍ es aceptada")
-        else:
-            print(f"'{input_string}' No es aceptada")
+# Ejemplo de cómo usar la instancia de AFD
+input_string = "abba"
+result = afd_instance.process_input(input_string)
+print(f"La cadena '{input_string}' es aceptada por el AFD: {result}")
