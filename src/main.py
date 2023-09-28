@@ -5,6 +5,7 @@
 #Creation: 23/08/2023
 #Last modification: 24/09/2023
 
+from minAFD import AFDMinimizer
 from regexToPostfix import regexToPostfix
 from regex2afn import Regex2AFNConverter
 from regex2afn import *
@@ -64,10 +65,27 @@ while exit:
             sys.stdout = sys.__stdout__  # Restaura la salida estándar
 
     if option == "4":
-        print("")
+        postfix_expression = regexToPostfix(alphabet, expression, epsilon).getResult()
+        converter = Regex2AFNConverter(epsilon)
+        nfa = converter.convert2NFA(postfix_expression)
+        minimizer = AFDMinimizer()
+        minDFA = minimizer.minimizeAFD(symbols, transitions, start, end)
+        minimizer.print_min_dfa(minDFA)
     
     if option == "5":
         print("Redirecting output to text files.")
 
     if option == "6":
-        exit = False
+        exit = False        exit = False
+        
+states = [0, 1, 2, 3, 4]
+symbols = ["a", "b"]
+transitions = [
+    {"a": 1, "b": 2},
+    {"a": 1, "b": 3},
+    {"a": 1, "b": 2},
+    {"a": 1, "b": 4},
+    {"a": 1, "b": 2},
+]
+start = 0
+end = {4}
