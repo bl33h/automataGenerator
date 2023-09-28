@@ -125,20 +125,3 @@ class AFD:
         for accept_state in self.accept_states:
             print(accept_state)
 
-converter = NFAtoAFDConverter(nfa_states, nfa_symbols, nfa_transitions, nfa_start_state, nfa_accept_states)
-afd_params = converter.get_afd_params()
-
-# Creación de una instancia de la clase AFD utilizando los parámetros del AFD
-afd_instance = AFD()
-afd_instance.add_states(afd_params[0])
-afd_instance.add_symbols(afd_params[1])
-for from_state, transitions in afd_params[2].items():
-    for symbol, to_state in transitions.items():
-        afd_instance.add_transition(from_state, symbol, to_state)
-afd_instance.set_start_state(afd_params[3])
-afd_instance.add_accept_states(afd_params[4])
-
-# Ejemplo de cómo usar la instancia de AFD
-input_string = "abba"
-result = afd_instance.process_input(input_string)
-print(f"La cadena '{input_string}' es aceptada por el AFD: {result}")

@@ -56,12 +56,34 @@ while exit:
             print("Result written to", nfa_output_file)
 
     if option == "3":
-        afd_results = afd_instance.print_afd_info()
+        postfix_expression = regexToPostfix(alphabet, expression, epsilon).getResult()
+        converter = Regex2AFNConverter(epsilon)
+        nfa = converter.convert2NFA(postfix_expression)
+        nfa_symbols = nfa[0]
+        nfa_states = [i for i in range(len(nfa[1]))]
+        og_transitions = nfa[1]
+        print("OG Transitions:", og_transitions)
+        nfa_transitions = {}
+        for i in range(len(og_transitions)):
+            new_transition = {}
+            for symbol in nfa_symbols:
+                if og_transitions[i].get(symbol) is not None:
+                    next_states = og_transitions[i].get(symbol)
+                    new_transition[symbol] = [next_states] if not isinstance(next_states, tuple) else list(next_states)
+            nfa_transitions[i] = new_transition
+        print("NFA Transitions:", nfa_transitions)
+        afdConverter = NFAtoAFDConverter(nfa_states, nfa_symbols, nfa_transitions, nfa[2], {nfa[3]})
+        afdConverter.convert_nfa_to_afd()
+        afd_results = afdConverter.get_afd_params()
+
+        for result in afd_results:
+            print(result)
+
         
         # Guarda los resultados en el archivo
         with open(afd_output_file, "w", encoding="utf-8") as file:
             sys.stdout = file
-            print(afd_instance)
+            #print(afd_instance)
             sys.stdout = sys.__stdout__  # Restaura la salida estándar
 
     if option == "4":
@@ -69,14 +91,12 @@ while exit:
         converter = Regex2AFNConverter(epsilon)
         nfa = converter.convert2NFA(postfix_expression)
         minimizer = AFDMinimizer()
-        minDFA = minimizer.minimizeAFD(symbols, transitions, start, end)
-        minimizer.print_min_dfa(minDFA)
-    
+        
     if option == "5":
         print("Redirecting output to text files.")
 
     if option == "6":
-        exit = False        exit = False
+        exit = False
         
 states = [0, 1, 2, 3, 4]
 symbols = ["a", "b"]
