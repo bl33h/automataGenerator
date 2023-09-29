@@ -61,3 +61,5 @@ build/
 # IDE/editor backup and cache files
 *.bak
 *.cache/
+postfix_output.txt
+nfa_output.txt
