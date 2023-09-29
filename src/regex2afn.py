@@ -3,7 +3,7 @@ import re
 
 class Regex2AFNConverter:
     
-    def __init__(self, epsilon, concat_operator="^"):
+    def __init__(self, epsilon, concat_operator="."):
         self.epsilon = epsilon
         self.concat_operator = concat_operator
         
@@ -45,7 +45,18 @@ class Regex2AFNConverter:
                     start = c1
                 if end == r2:
                     end = c2
-            else:                           # Union
+            elif i == self.concat_operator: # Concatenation
+                r21, r22 = stack.pop()
+                r11, r12 = stack.pop()
+                c1 = r11
+                c2 == r22
+                stack.append([c1, c2])
+                states[r12][self.epsilon] = r21
+                if r21 == start:
+                    start = r11
+                if r12 == end:
+                    end = r22
+            elif i == "+":                  # Union
                 counter = counter+1
                 c1 = counter
                 counter = counter+1
@@ -78,7 +89,7 @@ class Regex2AFNConverter:
         print("\nEstado Inicial:")
         print(start)
         
-        print("\nEstados de Aceptación:")
+        print("\nEstado de Aceptación:")
         print(end)
         
         print("\nTransiciones:")
