@@ -89,3 +89,23 @@ class Regex2AFNConverter:
                         print(f"Estado {i} -> Estado {ns} con símbolo '{symbol}'")
                 else:
                     print(f"Estado {i} -> Estado {next_state} con símbolo '{symbol}'")
+    
+    def process_input(input_strings, nfa):
+        keys, states, start, end = nfa
+        for input_string in input_strings:
+            current_states = {start}  # Inicialmente, el estado actual es el estado inicial
+            for symbol in input_string:
+                next_states = set()
+                for state in current_states:
+                    if symbol in states[state]:
+                        transition = states[state][symbol]
+                        if isinstance(transition, tuple):
+                            next_states.update(transition)
+                        else:
+                            next_states.add(transition)
+                current_states = next_states
+            # Después de procesar la cadena, verifica si el estado actual está en el estado de aceptación
+            if end in current_states:
+                print(f"'{input_string}' SÍ es aceptada")
+            else:
+                print(f"'{input_string}' No es aceptada")

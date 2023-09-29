@@ -122,6 +122,29 @@ class AFDMinimizer:
                 newTransitions.append((state, symbol, nexState))
         print("TRANSICIONES =", set(newTransitions))
 
+    def process_input(self, input_strings, minimizer):
+        symbols, states, transitions, start, end = minimizer
+        for input_string in input_strings:
+            current_state = start
+            for symbol in input_string:
+                if symbol not in symbols:
+                    print(f"'{input_string}' No es aceptada")
+                    break
+                if current_state in transitions:
+                    next_state = transitions[current_state].get(symbol)
+                    if next_state is not None:
+                        current_state = next_state
+                    else:
+                        print(f"'{input_string}' No es aceptada")
+                        break
+                else:
+                    print(f"'{input_string}' No es aceptada")
+                    break
+            if current_state in end:
+                print(f"'{input_string}' SÍ es aceptada")
+            else:
+                print(f"'{input_string}' No es aceptada")
+
 # -----------------------------------
 # Usage example
 # -----------------------------------

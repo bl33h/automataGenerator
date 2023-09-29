@@ -7,10 +7,22 @@
 
 from minAFD import AFDMinimizer
 from regexToPostfix import regexToPostfix
-from regex2afn import Regex2AFNConverter
+from regex2afn import *
 from regex2afn import *
 from afn2afd import *
 import sys
+
+states = [0, 1, 2, 3, 4]
+symbols = ["a", "b"]
+transitions = [
+    {"a": 1, "b": 2},
+    {"a": 1, "b": 3},
+    {"a": 1, "b": 2},
+    {"a": 1, "b": 4},
+    {"a": 1, "b": 2},
+]
+start = 0
+end = {4}
 
 # Define los nombres de los archivos para cada resultado
 nfa_output_file = "nfa_output.txt"
@@ -20,6 +32,7 @@ afd_output_file = "afd_output.txt"
 # alphabet and regex expression
 alphabet = "abce*+10"  # modify this according to your needs
 epsilon = 'ε'  # Utiliza el carácter epsilon directamente
+input_strings = ["ab", "100001", "abbcd", "baba", "10101", "b", ""]
 
 print("\n* Project 1 - Automata Generator *")
 # prompt the user to enter a regular expression
@@ -46,7 +59,9 @@ while exit:
         postfix_expression = regexToPostfix(alphabet, expression, epsilon).getResult()
         converter = Regex2AFNConverter(epsilon)
         nfa = converter.convert2NFA(postfix_expression)
-        
+
+        Regex2AFNConverter.process_input(input_strings, nfa)
+
         # Redirige la salida estándar al archivo nfa_output_file
         with open(nfa_output_file, "w", encoding="utf-8") as file:
             sys.stdout = file
@@ -79,7 +94,21 @@ while exit:
         for result in afd_results:
             print(result)
 
-        
+        afd_instance = AFD()
+        afd_instance.add_states(afd_results[0])
+        afd_instance.add_symbols(afd_results[1])
+        afd_instance.transitions = afd_results[2]
+        afd_instance.set_start_state(afd_results[3])
+        afd_instance.add_accept_states(afd_results[4])
+
+        # Procesar las cadenas de entrada y mostrar los resultados
+        print("\n---\nAnálsis de cadenas:")
+        for input_string in input_strings:
+            if afd_instance.process_input(input_string):
+                print(f"'{input_string}' SÍ es aceptada")
+            else:
+                print(f"'{input_string}' No es aceptada")
+
         # Guarda los resultados en el archivo
         with open(afd_output_file, "w", encoding="utf-8") as file:
             sys.stdout = file
@@ -91,6 +120,9 @@ while exit:
         converter = Regex2AFNConverter(epsilon)
         nfa = converter.convert2NFA(postfix_expression)
         minimizer = AFDMinimizer()
+        min_afd = minimizer.minimizeAFD(symbols, transitions, start, end)
+        
+        minimizer.process_input(input_strings, min_afd)
         
     if option == "5":
         print("Redirecting output to text files.")
@@ -98,14 +130,3 @@ while exit:
     if option == "6":
         exit = False
         
-states = [0, 1, 2, 3, 4]
-symbols = ["a", "b"]
-transitions = [
-    {"a": 1, "b": 2},
-    {"a": 1, "b": 3},
-    {"a": 1, "b": 2},
-    {"a": 1, "b": 4},
-    {"a": 1, "b": 2},
-]
-start = 0
-end = {4}
