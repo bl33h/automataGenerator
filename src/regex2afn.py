@@ -1,5 +1,11 @@
-import re
+#Copyright (C), 2023-2024, bl33h
+#FileName: regex2afn.py
+#Author: Sara Echeverria, Melissa Perez, Alejandro Ortega
+#Version: I
+#Creation: 23/08/2023
+#Last modification: 29/09/2023
 
+import re
 
 class Regex2AFNConverter:
     

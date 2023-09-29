@@ -3,7 +3,7 @@
 #Author: Sara Echeverria, Melissa Perez, Alejandro Ortega
 #Version: I
 #Creation: 23/08/2023
-#Last modification: 24/09/2023
+#Last modification: 29/09/2023
 
 from minAFD import AFDMinimizer
 from regexToPostfix import regexToPostfix

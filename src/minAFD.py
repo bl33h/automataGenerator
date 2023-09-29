@@ -1,3 +1,9 @@
+#Copyright (C), 2023-2024, bl33h
+#FileName: minAFD.py
+#Author: Sara Echeverria, Melissa Perez, Alejandro Ortega
+#Version: I
+#Creation: 23/08/2023
+#Last modification: 29/09/2023
 
 class AFDMinimizer:
     
@@ -18,21 +24,15 @@ class AFDMinimizer:
     def markStatePair(self, state_a: int, state_b: int, minTable: list, symbols: list, transitions: list) -> bool:
         state_b += state_a + 1
         for symbol in symbols:
-            # print("\tChecking for '{}' transitions".format(symbol))
             next_state_a = transitions[state_a].get(symbol)
             next_state_b = transitions[state_b].get(symbol)
-            # print("\tTransition for {}: '{}'".format(state_a, next_state_a))
-            # print("\tTransition for {}: '{}'".format(state_b, next_state_b))
             if next_state_a == next_state_b: 
-                # print("\tSkipped pair ({}, {})".format(next_state_a, next_state_b))
                 continue   # Discard state pairs in matrix diagonal
             i = next_state_a
             j = next_state_b
-            # print("\ti:", i, "j:", j)
             if i > j:   # If the state pair is under diagonal, flip the state indexes
                 i = next_state_b
                 j = next_state_a
-                # print("\tFlipped indices -> i:", i, "j:", j)
             if minTable[i][j - (i + 1)] == 1: return True
         return False
             
