@@ -76,6 +76,21 @@ class Regex2AFNConverter:
         
         return (keys, states, start, end)
     
+    def get_formatted_afn_params(self, afn: tuple) -> tuple:
+        nfa_symbols, nfa_og_transitions, nfa_start, nfa_end = afn
+        nfa_end = {nfa_end} # Convert end state to a set
+        nfa_states = [i for i in range(len(nfa_og_transitions))]
+        nfa_transitions = {}
+        for i in range(len(nfa_og_transitions)):
+            new_transition = {}
+            for symbol in nfa_symbols:
+                if nfa_og_transitions[i].get(symbol) is not None:
+                    next_states = nfa_og_transitions[i].get(symbol)
+                    new_transition[symbol] = [next_states] if not isinstance(next_states, tuple) else list(next_states)
+            nfa_transitions[i] = new_transition
+            
+        return (nfa_symbols, nfa_states, nfa_transitions, nfa_start, nfa_end)
+    
     def print_nfa(self, nfa):
         keys, states, start, end = nfa
         print("Estados:")

@@ -74,26 +74,12 @@ while exit:
         postfix_expression = regexToPostfix(alphabet, expression, epsilon).getResult()
         converter = Regex2AFNConverter(epsilon)
         nfa = converter.convert2NFA(postfix_expression)
-        nfa_symbols = nfa[0]
-        nfa_states = [i for i in range(len(nfa[1]))]
-        og_transitions = nfa[1]
-        print("OG Transitions:", og_transitions)
-        nfa_transitions = {}
-        for i in range(len(og_transitions)):
-            new_transition = {}
-            for symbol in nfa_symbols:
-                if og_transitions[i].get(symbol) is not None:
-                    next_states = og_transitions[i].get(symbol)
-                    new_transition[symbol] = [next_states] if not isinstance(next_states, tuple) else list(next_states)
-            nfa_transitions[i] = new_transition
-        print("NFA Transitions:", nfa_transitions)
-        afdConverter = NFAtoAFDConverter(nfa_states, nfa_symbols, nfa_transitions, nfa[2], {nfa[3]})
+        nfa_symbols, nfa_states, nfa_transitions, nfa_start, nfa_end = converter.get_formatted_afn_params(nfa)
+        afdConverter = NFAtoAFDConverter(nfa_states, nfa_symbols, nfa_transitions, nfa_start, nfa_end)
         afdConverter.convert_nfa_to_afd()
         afd_results = afdConverter.get_afd_params()
-
-        for result in afd_results:
-            print(result)
-
+        afd_formatted_results = afdConverter.get_formatted_afd_params()
+        
         afd_instance = AFD()
         afd_instance.add_states(afd_results[0])
         afd_instance.add_symbols(afd_results[1])
