@@ -57,11 +57,12 @@ class NFAtoAFDConverter:
                     self.afd_transitions[tuple(current_state)][symbol] = tuple(epsilon_closure_set)
 
         self.afd_start_state = tuple(start_state)
+        self.afd_symbols = [symbol for symbol in self.nfa_symbols if symbol != self.epsilon]
 
     def get_afd_params(self):
         return (
             list(self.afd_states),
-            list(self.afd_symbols),
+            self.afd_symbols,
             self.afd_transitions,
             self.afd_start_state,
             self.afd_accept_states
