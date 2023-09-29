@@ -8,7 +8,6 @@
 from minAFD import AFDMinimizer
 from regexToPostfix import regexToPostfix
 from regex2afn import *
-from regex2afn import *
 from afn2afd import *
 import sys
 
@@ -25,9 +24,9 @@ start = 0
 end = {4}
 
 # Define los nombres de los archivos para cada resultado
-nfa_output_file = "nfa_output.txt"
-postfix_output_file = "postfix_output.txt"
-afd_output_file = "afd_output.txt"
+nfa_output_file = "nfaOutput.txt"
+postfix_output_file = "postfixOutput.txt"
+afd_output_file = "afdOutput.txt"
 
 # alphabet and regex expression
 alphabet = "abce*+10"  # modify this according to your needs
@@ -41,7 +40,7 @@ expression = input("enter the regular expression: ")
 exit = True
 
 while exit:
-    option = input("\n--------------------\nSelect an option:\n (1)Regex to postfix\n (2)Regex to AFN\n (3)From AFN to AFD\n (4)Min AFD\n (5)Simulation of AFN, AFD, and min AFD\n (6)Exit\n-------------------- \n>>> ")
+    option = input("\n--------------------\nSelect an option:\n (1)Regex to postfix\n (2)Regex to AFN\n (3)From AFN to AFD\n (4)Min AFD\n (5)Exit\n-------------------- \n>>> ")
 
     if option == "1":
         # Convert the infix regular expression to postfix
@@ -111,8 +110,4 @@ while exit:
         minimizer.process_input(input_strings, min_afd)
         
     if option == "5":
-        print("Redirecting output to text files.")
-
-    if option == "6":
         exit = False
-        
