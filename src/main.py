@@ -26,7 +26,8 @@ end = {4}
 # Define los nombres de los archivos para cada resultado
 nfa_output_file = "nfaOutput.txt"
 postfix_output_file = "postfixOutput.txt"
-afd_output_file = "afdOutput.txt"
+afd_output_file = "dfaOutput.txt"
+min_afd_output_file = "minDfaOutput.txt"
 
 # alphabet and regex expression
 alphabet = "abced*+10"  # modify this according to your needs
@@ -117,7 +118,7 @@ while exit:
         afd_instance.transitions = min_afd[2]
         afd_instance.set_start_state(min_afd[3])
         afd_instance.add_accept_states(min_afd[4])
-
+        
         # Ahora procesa las cadenas de entrada con la instancia de AFD
         print("\n---\nAnálisis de cadenas:")
         for input_string in input_strings:
