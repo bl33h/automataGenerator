@@ -167,6 +167,6 @@ class AFDMinimizer:
 # start = 0
 # end = {4}
 
-minimizer = AFDMinimizer()
-minAFD = minimizer.minimizeAFD(symbols, transitions, start, end)
-print(minAFD)
+# minimizer = AFDMinimizer()
+# minAFD = minimizer.minimizeAFD(symbols, transitions, start, end)
+# print(minAFD)
