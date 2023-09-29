@@ -58,6 +58,25 @@ class NFAtoAFDConverter:
 
         self.afd_start_state = tuple(start_state)
         self.afd_symbols = [symbol for symbol in self.nfa_symbols if symbol != self.epsilon]
+        
+    def get_formatted_afd_params(self):
+        # Map the states to new numbers/labels
+        new_states = []
+        new_state_map = {}
+        for i, state in enumerate(self.afd_states):
+            new_states.append(i)
+            new_state_map[state] = i
+        # Reformat trasitions to comply with new states
+        new_transitions = [self.afd_transitions.get(state) if self.afd_transitions.get(state) is not None else {} for state, new_state in new_state_map.items()]
+        for transition in new_transitions:
+            for symbol in self.afd_symbols:
+                if transition.get(symbol) is not None:
+                    transition[symbol] = new_state_map.get(transition.get(symbol))
+        # Set new start, end states according to new_state_map
+        new_start = new_state_map.get(self.afd_start_state)
+        new_end = set([new_state_map.get(end_state) for end_state in self.afd_accept_states])
+        # Return reformatted values in a tuple
+        return (self.afd_symbols, new_transitions, new_start, new_end)
 
     def get_afd_params(self):
         return (
