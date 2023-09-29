@@ -1,0 +1,19 @@
+Estados del AFD:
+(0, 2, 4)
+(3, 5)
+(1, 5)
+
+Símbolos del AFD:
+a
+b
+
+Transiciones del AFD:
+De (0, 2, 4) a 2 con símbolo 'a'
+De (0, 2, 4) a 1 con símbolo 'b'
+
+Estado Inicial del AFD:
+(0, 2, 4)
+
+Estados de Aceptación del AFD:
+(3, 5)
+(1, 5)

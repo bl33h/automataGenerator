@@ -1,5 +1,11 @@
-from regex2afn import *
+#Copyright (C), 2023-2024, bl33h
+#FileName: afn2afd
+#Author: Sara Echeverria, Melissa Perez, Alejandro Ortega
+#Version: I
+#Creation: 23/08/2023
+#Last modification: 03/09/2023
 
+from regex2afn import *
 from collections import deque
 
 class NFAtoAFDConverter:
@@ -145,4 +151,3 @@ class AFD:
         print("\nEstados de Aceptación del AFD:")
         for accept_state in self.accept_states:
             print(accept_state)
-

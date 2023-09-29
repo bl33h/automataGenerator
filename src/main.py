@@ -29,7 +29,7 @@ postfix_output_file = "postfixOutput.txt"
 afd_output_file = "afdOutput.txt"
 
 # alphabet and regex expression
-alphabet = "abce*+10"  # modify this according to your needs
+alphabet = "abced*+10"  # modify this according to your needs
 epsilon = 'ε'  # Utiliza el carácter epsilon directamente
 input_strings = ["ab", "100001", "abbcd", "baba", "10101", "b", ""]
 
@@ -106,8 +106,25 @@ while exit:
         nfa = converter.convert2NFA(postfix_expression)
         minimizer = AFDMinimizer()
         min_afd = minimizer.minimizeAFD(symbols, transitions, start, end)
-        
-        minimizer.process_input(input_strings, min_afd)
+
+        # Muestra el AFD minimizado
+        minimizer.print_min_dfa(min_afd)
+
+        # Crea una instancia de AFD con los componentes de la tupla min_afd
+        afd_instance = AFD()
+        afd_instance.add_states(min_afd[0])
+        afd_instance.add_symbols(min_afd[1])
+        afd_instance.transitions = min_afd[2]
+        afd_instance.set_start_state(min_afd[3])
+        afd_instance.add_accept_states(min_afd[4])
+
+        # Ahora procesa las cadenas de entrada con la instancia de AFD
+        print("\n---\nAnálisis de cadenas:")
+        for input_string in input_strings:
+            if afd_instance.process_input([input_string]):
+                print(f"'{input_string}' SÍ es aceptada")
+            else:
+                print(f"'{input_string}' No es aceptada")
         
     if option == "5":
         exit = False
