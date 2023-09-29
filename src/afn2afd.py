@@ -3,7 +3,7 @@ from regex2afn import *
 from collections import deque
 
 class NFAtoAFDConverter:
-    def __init__(self, nfa_states, nfa_symbols, nfa_transitions, nfa_start_state, nfa_accept_states):
+    def __init__(self, nfa_states, nfa_symbols, nfa_transitions, nfa_start_state, nfa_accept_states, epsilon="\u03b5"):
         self.nfa_states = nfa_states
         self.nfa_symbols = nfa_symbols
         self.nfa_transitions = nfa_transitions
@@ -14,6 +14,7 @@ class NFAtoAFDConverter:
         self.afd_transitions = {}
         self.afd_start_state = None
         self.afd_accept_states = set()
+        self.epsilon = epsilon
         self.convert_nfa_to_afd()
 
     def epsilon_closure(self, states):
@@ -21,8 +22,8 @@ class NFAtoAFDConverter:
         stack = list(states)
         while stack:
             state = stack.pop()
-            if state in self.nfa_transitions and '' in self.nfa_transitions[state]:
-                epsilon_transitions = self.nfa_transitions[state]['']
+            if state in self.nfa_transitions and self.epsilon in self.nfa_transitions[state]:
+                epsilon_transitions = self.nfa_transitions[state][self.epsilon]
                 for epsilon_state in epsilon_transitions:
                     if epsilon_state not in epsilon_closure_set:
                         epsilon_closure_set.add(epsilon_state)
@@ -41,7 +42,7 @@ class NFAtoAFDConverter:
             if any(state in self.nfa_accept_states for state in current_state):
                 self.afd_accept_states.add(tuple(current_state))
             for symbol in self.nfa_symbols:
-                if symbol == '':
+                if symbol == self.epsilon:
                     continue
                 new_state = []
                 for nfa_state in current_state:
