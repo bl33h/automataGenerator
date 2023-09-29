@@ -98,7 +98,7 @@ while exit:
         # Guarda los resultados en el archivo
         with open(afd_output_file, "w", encoding="utf-8") as file:
             sys.stdout = file
-            #print(afd_instance)
+            afd_instance.print_afd_info()
             sys.stdout = sys.__stdout__  # Restaura la salida estándar
 
     if option == "4":
