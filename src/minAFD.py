@@ -72,7 +72,6 @@ class AFDMinimizer:
             for j in range(len(minTable[i])):
                 temp.append(minTable[i][j])
             newMinTable.append(temp)
-        newMinTable[0][0] = 1
 
         # Continue iterating to fill the table until minTable and newMinTable are equal
         while True:
@@ -168,6 +167,6 @@ class AFDMinimizer:
 # start = 0
 # end = {4}
 
-# minimizer = AFDMinimizer()
-# minAFD = minimizer.minimizeAFD(symbols, transitions, start, end)
-# print(minAFD)
+minimizer = AFDMinimizer()
+minAFD = minimizer.minimizeAFD(symbols, transitions, start, end)
+print(minAFD)
