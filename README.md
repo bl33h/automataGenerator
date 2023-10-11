@@ -17,7 +17,24 @@
 ## Features
 
 The main features of the application include:
-- A
+- Regex to NFA Conversion:
+  - Converts a postfix regular expression into a Non-deterministic Finite Automaton (NFA).
+  - Utilizes the Shunting Yard algorithm for parsing and evaluating postfix expressions.
+  - Generates NFA states, transitions, and handles epsilon (ε) transitions.
+    
+- NFA to DFA Conversion:
+  - Converts the Non-deterministic Finite Automaton (NFA) into a Deterministic Finite Automaton (DFA).
+  - Computes epsilon closures and minimizes the number of states in the DFA.
+  - Allows for processing input strings and determining their acceptance based on the DFA.
+    
+- DFA Minimization:
+  - Minimizes the Deterministic Finite Automaton (DFA) to reduce the number of states while preserving language recognition.
+  - Implements the Shunting Yard algorithm to evaluate regular expressions and convert them to postfix notation.
+
+
+- Readable Output:
+  - Provides clear and structured output, including information on states, symbols, transitions, the start state, and accept states.
+  - Enables easy interpretation of automaton components for debugging and analysis.
 
 ## How To Use
 To clone and run this application, you'll need [Git](https://git-scm.com) and [Python](https://www.python.org/downloads/) installed on your computer. From your command line:
