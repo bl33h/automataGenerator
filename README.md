@@ -1,4 +1,5 @@
 # atomataGenerator
+This project provides a Python-based tool for converting Non-Deterministic Finite Automata (NFA) to Deterministic Finite Automata (DFA) and subsequently minimizing the resulting DFA. It also includes functionality for converting regular expressions to NFAs.
 
 <p align="center">
   <br>
@@ -12,7 +13,21 @@
 </p>
 
 ## Files
-- src: the file that implements de solution.
+- **src:**
+  - **afn2afd.py:**
+    - Contains the NFA to DFA converter class.
+
+  - **main.py:**
+    - The main application file that orchestrates the entire process, including input processing, NFA to DFA conversion, and minimization.
+
+  - **minAFD.py:**
+    - Implements the AFDMinimizer class responsible for DFA minimization.
+
+  - **regex2afn.py:**
+    - Defines the Regex2AFNConverter class for converting regular expressions to NFAs.
+
+  - **regexToPostfix.py:**
+    - Implements the Shunting Yard algorithm for converting regular expressions to postfix notation.
 
 ## Features
 
